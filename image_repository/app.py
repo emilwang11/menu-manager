@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect
 import sqlite3 as sql
 
+from form import EditForm
 
 app = Flask(__name__)
 
@@ -68,13 +69,25 @@ def manage_page():
 
     return render_template("manage.html", products=products, earnings=earnings)
 
+# @app.route("/edit/<product_id>")
+# def edit(product_id):
+#     return render_template("edit.html")
     # if request.method == 'POST':
     #     (cursor, connection) = get_cursor()
     #     cursor.execute(
     #         "UPDATE products SET name = ? WHERE rowid = ?", (name, product_id))
     #     connection.commit()
 
-
+@app.route("/edit/<product_id>", methods=["GET", "POST"])
+def edit(product_id):
+    form = EditForm()
+    if form.validate_on_submit():
+        return redirect(url_for("success"))
+    return render_template(
+        "edit.jinja2",
+        form=form,
+        template="form-template"
+    )
 
 @app.route("/buy/<product_id>")
 def buy(product_id):

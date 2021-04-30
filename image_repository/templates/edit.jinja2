@@ -1,0 +1,24 @@
+
+{% block content %}
+
+    <div class="form-wrapper">
+      <h2 class="title">Contact</h2>
+
+      <form method="POST" action="{{ url_for('edit', product_id = product_id) }}">
+
+          <fieldset class="form-field">
+              {{ form.name.label }}
+              {{ form.name(size=20) }}
+          </fieldset>
+
+          <fieldset class="form-field">
+              {{ form.description.label }}
+              {{ form.description }}
+          </fieldset>
+
+          {{ form.submit }}
+
+      </form>
+    </div>
+
+{% endblock %}
