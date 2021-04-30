@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Image Repository</title>
+    </head>
+
+    <body>
+        <a href="/">Main page</a> <br>
+        <a href="/reset">Reset DB (Dev Option)</a> <br>
+
+        <br>
+        <p>You have sold ${{earnings}} in products so far!</p> <br>
+
+        <table border = 1>
+            <thead>
+                <td>Name</td>
+                <td>Description</td>
+                <td>Price</td>
+                <td>Stock</td>
+                <td>Image</td>
+                <td></td>
+            </thead>
+
+            {% for product in products %}
+                <tr>
+                <td>{{product["name"]}}</td>
+                <td>{{product["description"]}}</td>
+                <td>{{product["price"]}}</td>
+                <td>{{product["stock"]}}</td>
+                <td><img src='{{product["src"]}}' /></td>
+                <td><a href='/edit/{{product["id"]}}'>EDIT</button></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
