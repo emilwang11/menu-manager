@@ -1,35 +1,12 @@
 from flask import Flask, render_template, request, url_for, redirect
 import sqlite3 as sql
-
-from form import EditForm
-
-app = Flask(__name__)
+from image_repository import db
+from .form import EditForm
 
 def get_cursor():
     connection = sql.connect("products.db")
     cursor = connection.cursor()
     return (cursor, connection)
-
-
-def initialize_db():
-    (cursor, connection) = get_cursor()
-
-    #create table with products
-    cursor.execute("DROP TABLE IF EXISTS products")
-    cursor.execute("CREATE TABLE products (name TEXT, description TEXT, price FLOAT, stock INTEGER, imgpath TEXT)")
-    cursor.execute("""INSERT INTO products (name, description, price, stock, imgpath) VALUES \
-        ('Pasta', 'This dish...', 19.99, 10, './static/images/pasta.jpeg'), \
-        ('Soup', 'This dish...', 19.99, 10, './static/images/pasta.jpeg'), \
-        ('Cake', 'This dish...', 19.99, 10, './static/images/pasta.jpeg')
-    """)
-
-    # Create empty transactions table
-    cursor.execute("DROP TABLE IF EXISTS transactions")
-    cursor.execute("CREATE TABLE transactions (timestamp TEXT, productid INTEGER, value INTEGER)")
-
-    # Commit the db changes
-    connection.commit()
-    print("Initialized database")
 
 def process_info():
     (cursor, _) = get_cursor()
