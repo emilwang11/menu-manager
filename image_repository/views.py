@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect
 import sqlite3 as sql
-from image_repository import db
+from image_repository import app, db
 from .form import EditForm
 
 def get_cursor():
@@ -94,11 +94,9 @@ def buy(product_id):
 
 @app.route("/reset")
 def reset():
-    initialize_db()
+    db.initialize_db()
     return render_template("message.html", message="Database reset.")
 
-if __name__ == '__main__':
-    initialize_db()
-    app.run(debug = True)
+
 
 
