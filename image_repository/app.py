@@ -78,27 +78,23 @@ def edit(product_id):
         def __init__(self):
             self.name = "a"
             self.description = "ashd"
-    item = item()
-    form = EditForm(obj=item)
-
-    # form.data = {'name': 'a', 'description': 'ashkjdj'}
-    # if request.method == 'GET':
-    #     form.name.data = "james"
-    #     form.description.data = "my_user.email"
-    form.process(obj = item)
+    # item = item()
+    form = EditForm(obj=item())
+    # form.process(obj = item)
 
 
-    print(form.data.name)
+    # print(form.data.name)
     if form.validate_on_submit():
         form.populate_obj(item)
         db.session.add(item)
         db.session.commit()
 
+
     # if EditForm().validate_on_submit():
     #     return redirect(url_for("success"))
     return render_template(
         "edit.jinja2",
-        form=EditForm(),
+        form=form,
         template="form-template"
     )
 
