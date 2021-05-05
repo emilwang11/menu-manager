@@ -69,23 +69,36 @@ def manage_page():
 
     return render_template("manage.html", products=products, earnings=earnings)
 
-# @app.route("/edit/<product_id>")
-# def edit(product_id):
-#     return render_template("edit.html")
-    # if request.method == 'POST':
-    #     (cursor, connection) = get_cursor()
-    #     cursor.execute(
-    #         "UPDATE products SET name = ? WHERE rowid = ?", (name, product_id))
-    #     connection.commit()
+
 
 @app.route("/edit/<product_id>", methods=["GET", "POST"])
 def edit(product_id):
-    form = EditForm()
+    # item = {'Name': 'a', 'Description': 'ashkjdj'}
+    class item(object):
+        def __init__(self):
+            self.name = "a"
+            self.description = "ashd"
+    item = item()
+    form = EditForm(obj=item)
+
+    # form.data = {'name': 'a', 'description': 'ashkjdj'}
+    # if request.method == 'GET':
+    #     form.name.data = "james"
+    #     form.description.data = "my_user.email"
+    form.process(obj = item)
+
+
+    print(form.data.name)
     if form.validate_on_submit():
-        return redirect(url_for("success"))
+        form.populate_obj(item)
+        db.session.add(item)
+        db.session.commit()
+
+    # if EditForm().validate_on_submit():
+    #     return redirect(url_for("success"))
     return render_template(
         "edit.jinja2",
-        form=form,
+        form=EditForm(),
         template="form-template"
     )
 
