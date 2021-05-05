@@ -73,25 +73,17 @@ def manage_page():
 
 @app.route("/edit/<product_id>", methods=["GET", "POST"])
 def edit(product_id):
-    # item = {'Name': 'a', 'Description': 'ashkjdj'}
     class item(object):
         def __init__(self):
             self.name = "a"
             self.description = "ashd"
-    # item = item()
     form = EditForm(obj=item())
-    # form.process(obj = item)
 
-
-    # print(form.data.name)
     if form.validate_on_submit():
         form.populate_obj(item)
         db.session.add(item)
         db.session.commit()
 
-
-    # if EditForm().validate_on_submit():
-    #     return redirect(url_for("success"))
     return render_template(
         "edit.jinja2",
         form=form,
