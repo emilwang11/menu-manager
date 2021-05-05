@@ -4,8 +4,6 @@ from wtforms.validators import DataRequired, Length
 
 
 class EditForm(FlaskForm):
-    class Meta:
-        csrf = False
 
     name = StringField(
         'Name',
