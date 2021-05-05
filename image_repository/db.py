@@ -7,9 +7,9 @@ def initialize_db():
     cursor.execute("DROP TABLE IF EXISTS products")
     cursor.execute("CREATE TABLE products (name TEXT, description TEXT, price FLOAT, stock INTEGER, imgpath TEXT)")
     cursor.execute("""INSERT INTO products (name, description, price, stock, imgpath) VALUES \
-        ('Pasta', 'This dish...', 19.99, 10, './static/images/pasta.jpeg'), \
-        ('Soup', 'This dish...', 19.99, 10, './static/images/pasta.jpeg'), \
-        ('Cake', 'This dish...', 19.99, 10, './static/images/pasta.jpeg')
+        ('Pasta', 'This dish...', 19.99, 10, '/static/images/pasta.jpeg'), \
+        ('Soup', 'This dish...', 19.99, 10, '/static/images/pasta.jpeg'), \
+        ('Cake', 'This dish...', 19.99, 10, '/static/images/pasta.jpeg')
     """)
 
     # Create empty transactions table
