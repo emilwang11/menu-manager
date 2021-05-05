@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextField, IntegerField, FloatField, DecimalField, SubmitField
+from wtforms import StringField, TextField, IntegerField, FloatField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length
 
 
@@ -11,7 +11,7 @@ class EditForm(FlaskForm):
         'Name',
         [DataRequired()]
     )
-    description = TextField(
+    description = TextAreaField(
         'Description',
     )
     price = FloatField(

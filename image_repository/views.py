@@ -3,86 +3,43 @@ import sqlite3 as sql
 from image_repository import app, db
 from .form import EditForm
 
-def get_cursor():
-    connection = sql.connect("products.db")
-    cursor = connection.cursor()
-    return (cursor, connection)
-
-def process_info():
-    (cursor, _) = get_cursor()
-    cursor.execute("SELECT rowid, * FROM products")
-
-    rows = cursor.fetchall()
-    print("Retrieved %d database entries" % len(rows))
-
-    # Pre-process product info for HTML templates
-    products = []
-    for row in rows:
-        products.append({
-            "id":    row[0],
-            "name":  row[1],
-            "description": row[2],
-            "price": "$%.2f" % (row[3]),
-            "stock": "%d left" % (row[4]),
-            "src":   "%s" % (row[5]),
-        })
-    return products
-
+#home page to view and buy products
 @app.route("/")
 def home_page():
-    products = process_info()
+    products = db.process_info()
     return render_template("index.html", products=products)
 
+#page to edit and delete products
 @app.route("/manage", methods=['GET'])
 def manage_page():
-    products = process_info()
+    products = db.process_info()
 
-    (cursor, _) = get_cursor()
+    (cursor, _) = db.get_cursor()
+    earnings ="$%.2f" % db.calc_sum()
 
-    # Display total sales so far
-    cursor.execute("SELECT SUM(value) FROM transactions")
-    result = cursor.fetchone()[0]
-    earnings = result if result else 0
-
+    # Display total sales
     return render_template("manage.html", products=products, earnings=earnings)
 
-
+#delete product
 @app.route("/delete/<product_id>")
 def delete(product_id):
-    (cursor, connection) = get_cursor()
-    cursor.execute("DELETE FROM products WHERE rowid = ?", (product_id,))
-    connection.commit()
+    db.delete(product_id)
     return render_template("message.html", message="Deletion successful!")
 
-
+#form page to edit information about product
 @app.route("/edit/<product_id>", methods=["GET", "POST"])
 def edit(product_id):
-
-    (cursor, connection) = get_cursor()
-    cursor.execute("SELECT name, description, price, stock FROM products WHERE rowid = ?", (product_id,))
-    result = cursor.fetchone()
-
+    item_info = db.get_product(product_id)
     class item(object):
         def __init__(self):
-            self.name = result[0]
-            self.description = result[1]
-            self.price = result[2]
-            self.stock = result[3]
+            self.name = item_info[0]
+            self.description = item_info[1]
+            self.price = item_info[2]
+            self.stock = item_info[3]
     form = EditForm(obj=item())
 
-
     if form.validate_on_submit():
-        # form.populate_obj(item())
-
-        # item().name = form.name.data
-        # item().description = form.description.data
-        # item().price = form.price.data
-        # item().stock = form.stock.data
-
-        print(form.price.data)
-        cursor.execute("UPDATE products SET name = ?, description = ?, price = ?, stock = ? WHERE rowid = ?", (form.name.data, form.description.data, form.price.data, form.stock.data, product_id,))
-        connection.commit()
-        print("updated")
+        db.update_product(form.name.data, form.description.data, form.price.data, form.stock.data, product_id,)
         return redirect('/manage')
 
     return render_template(
@@ -92,32 +49,26 @@ def edit(product_id):
         template="form-template"
     )
 
+#buy product
 @app.route("/buy/<product_id>")
 def buy(product_id):
+
     if not product_id:
         return render_template("message.html", message="Invalid product ID!")
 
-    (cursor, connection) = get_cursor()
-
-    cursor.execute("SELECT rowid, price, stock FROM products WHERE rowid = ?", (product_id,))
-    result = cursor.fetchone()
+    result = db.get_product(product_id)
 
     if not result:
         return render_template("message.html", message="Invalid product ID!")
-    (rowid, price, stock) = result
+    (price, stock) = (result[2], result[3])
 
     if stock <= 0:
         return render_template("message.html", message="Insufficient stock!")
 
-    print("Processed transaction of value $%.2f" % (price/100.0))
-    cursor.execute("INSERT INTO transactions (timestamp, productid, value) VALUES " + \
-        "(datetime(), ?, ?)", (rowid, price))
-
-    cursor.execute("UPDATE products SET stock = stock - 1 WHERE rowid = ?", (product_id,))
-    connection.commit()
+    db.process_transaction(product_id, price)
     return render_template("message.html", message="Purchase successful!")
 
-
+#reset values in the database
 @app.route("/reset")
 def reset():
     db.initialize_db()
