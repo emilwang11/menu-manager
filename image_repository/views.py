@@ -22,7 +22,7 @@ def process_info():
             "id":    row[0],
             "name":  row[1],
             "description": row[2],
-            "price": "$%.2f" % (row[3]/100.0),
+            "price": "$%.2f" % (row[3]),
             "stock": "%d left" % (row[4]),
             "src":   "%s" % (row[5]),
         })
@@ -48,20 +48,38 @@ def manage_page():
 
 @app.route("/edit/<product_id>", methods=["GET", "POST"])
 def edit(product_id):
+
+    (cursor, connection) = get_cursor()
+    cursor.execute("SELECT name, description, price, stock FROM products WHERE rowid = ?", (product_id,))
+    result = cursor.fetchone()
+
     class item(object):
         def __init__(self):
-            self.name = "a"
-            self.description = "ashd"
+            self.name = result[0]
+            self.description = result[1]
+            self.price = result[2]
+            self.stock = result[3]
     form = EditForm(obj=item())
 
+
     if form.validate_on_submit():
-        form.populate_obj(item)
-        db.session.add(item)
-        db.session.commit()
+        # form.populate_obj(item())
+
+        # item().name = form.name.data
+        # item().description = form.description.data
+        # item().price = form.price.data
+        # item().stock = form.stock.data
+
+        print(form.price.data)
+        cursor.execute("UPDATE products SET name = ?, description = ?, price = ?, stock = ? WHERE rowid = ?", (form.name.data, form.description.data, form.price.data, form.stock.data, product_id,))
+        connection.commit()
+        print("updated")
+        return redirect('/manage')
 
     return render_template(
         "edit.jinja2",
         form=form,
+        product_id=product_id,
         template="form-template"
     )
 

@@ -1,22 +1,25 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextField, SubmitField
+from wtforms import StringField, TextField, IntegerField, FloatField, DecimalField, SubmitField
 from wtforms.validators import DataRequired, Length
 
 
 class EditForm(FlaskForm):
     class Meta:
         csrf = False
-    """Contact form."""
+
     name = StringField(
         'Name',
         [DataRequired()]
     )
     description = TextField(
         'Description',
-        [
-            DataRequired(),
-            Length(min=4,
-            message=('Your description is too short.'))
-        ]
+    )
+    price = FloatField(
+        'Price',
+        [DataRequired()]
+    )
+    stock = IntegerField(
+        'Stock',
+        [DataRequired()]
     )
     submit = SubmitField('Submit')
