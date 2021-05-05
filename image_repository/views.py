@@ -33,7 +33,7 @@ def home_page():
     products = process_info()
     return render_template("index.html", products=products)
 
-@app.route("/manage", methods=['GET', 'POST'])
+@app.route("/manage", methods=['GET'])
 def manage_page():
     products = process_info()
 
@@ -45,6 +45,15 @@ def manage_page():
     earnings = result if result else 0
 
     return render_template("manage.html", products=products, earnings=earnings)
+
+
+@app.route("/delete/<product_id>")
+def delete(product_id):
+    (cursor, connection) = get_cursor()
+    cursor.execute("DELETE FROM products WHERE rowid = ?", (product_id,))
+    connection.commit()
+    return render_template("message.html", message="Deletion successful!")
+
 
 @app.route("/edit/<product_id>", methods=["GET", "POST"])
 def edit(product_id):

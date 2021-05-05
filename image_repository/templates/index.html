@@ -1,14 +1,13 @@
 <!doctype html>
 <html>
     <head>
-        <title>Image Repository</title>
+        <title>Emily's Cafe Menu</title>
     </head>
 
     <body>
-        <a href="/">Main page</a> <br>
-        <a href="/reset">Reset DB (Dev Option)</a> <br>
-        <a href="/manage">Manage</a> <br>
-
+        <h1> Emily's Cafe Menu</h1>
+        <a href="/manage">Manage Products</a> <br>
+        <a href="/reset">Reset Database</a> <br>
         <br>
 
 
@@ -28,7 +27,6 @@
                 <td>{{product["description"]}}</td>
                 <td>{{product["price"]}}</td>
                 <td>{{product["stock"]}}</td>
-                <!-- <td><img src="{{url_for('static',filename = 'images/pasta.jpeg')}}"/></td> -->
                 <td><img src='{{product["src"]}}' /></td>
                 <td><a href='/buy/{{product["id"]}}'>BUY</button></td>
                 </tr>

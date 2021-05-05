@@ -29,6 +29,7 @@
                 <td>{{product["stock"]}}</td>
                 <td><img src='{{product["src"]}}' /></td>
                 <td><a href='/edit/{{product["id"]}}'>EDIT</button></td>
+                <td><a href='/delete/{{product["id"]}}'>DELETE</button></td>
                 </tr>
             {% endfor %}
         </table>
