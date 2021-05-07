@@ -1,4 +1,4 @@
-# Menu
+# Menu Manager
 ## Shopify Fall 2021 Developer Intern Challenge
 
 With the prompt of building an image repository in mind, I decided to turn it into a menu where users can buy and manage products.
