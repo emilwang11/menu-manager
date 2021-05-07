@@ -1,9 +1,9 @@
 # Menu
-##Shopify Fall 2021 Developer Intern Challenge
+## Shopify Fall 2021 Developer Intern Challenge
 
 With the prompt of building an image repository in mind, I decided to turn it into a menu where users can buy and manage products.
 
-To run the application, run <pre><code> python run.py </code></pre>
+To run the application, run `python run.py`
 
 #### Home Page
 As a customer,you are able to view the menu item's information and purchase it.
