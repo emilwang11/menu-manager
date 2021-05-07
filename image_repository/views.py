@@ -52,7 +52,6 @@ def edit(product_id):
 #buy product
 @app.route("/buy/<product_id>")
 def buy(product_id):
-
     if not product_id:
         return render_template("message.html", message="Invalid product ID!")
 
