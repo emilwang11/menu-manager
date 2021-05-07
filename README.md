@@ -4,9 +4,9 @@
 With the prompt of building an image repository, I decided to turn it into a menu where users can buy and manage products.
 
 To run the application, run
-1. Clone the repo
+1. Clone the repo`
 2.`pip install .`
-3.  `python run.py`
+3.`python run.py`
 
 #### Home Page
 As a customer,you are able to view the menu item's information and purchase it.
